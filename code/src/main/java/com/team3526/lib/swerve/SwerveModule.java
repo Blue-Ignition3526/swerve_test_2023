@@ -1,0 +1,110 @@
+// Codigo para declarar un solo modulo de Swerve
+/////////////////////////////////////////////////
+// Code to declare a single Swerve module
+
+package com.team3526.lib.swerve; // Nombre del paquete donde se encuentra el modulo // Package name where the module is located
+ 
+// Imports
+import frc.robot.Constants.Swerve; // Importar las constantes de Swerve // Import Swerve constants
+import com.ctre.phoenix.sensors.CANCoder; // Importar el CANCoder // Import CANCoder
+import com.revrobotics.CANSparkMax; // Importar el CANSparkMax // Import CANSparkMax
+import com.revrobotics.RelativeEncoder; // Importar el RelativeEncoder // Import RelativeEncoder
+import com.revrobotics.CANSparkMaxLowLevel.MotorType; // Importar los tipos de motor // Import motor types
+import edu.wpi.first.math.controller.PIDController; // Importar el PIDController // Import PIDController
+import edu.wpi.first.math.geometry.Rotation2d; // Importar el Rotation2d // Import Rotation2d
+import edu.wpi.first.math.kinematics.SwerveModulePosition; // Importar el SwerveModulePosition // Import SwerveModulePosition
+import edu.wpi.first.math.kinematics.SwerveModuleState; // Importar el SwerveModuleState // Import SwerveModuleState
+import edu.wpi.first.wpilibj2.command.SubsystemBase; // Importar el SubsystemBase // Import SubsystemBase
+
+public class SwerveModule extends SubsystemBase {
+
+  private final CANSparkMax m_driveMotor; // Motor de manejo // Drive motor
+  private final CANSparkMax m_turningMotor; // Motor de giro // Turning motor
+
+  private final RelativeEncoder m_turningEncoder; // Encoder de giro // Turning encoder
+  private final RelativeEncoder m_driveEncoder; // Encoder de manejo // Drive encoder
+
+  private final PIDController m_turningPIDController; // Controlador PID de giro // Turning PID controller
+
+  private final CANCoder m_turningAbsoluteEncoder; // Encoder absoluto de giro // Turning absolute encoder
+  private final boolean m_turningAbsoluteEncoderInverted; // Invertir el encoder absoluto de giro // Invert turning absolute encoder
+  private final double m_turningEncoderOffsetRad; // Offset del encoder de giro // Turning encoder offset
+
+  public SwerveModule(Object[] Arr) { // Constructor del modulo de Swerve // Swerve module constructor
+    this.m_turningEncoderOffsetRad = (double) Arr[0]; // Offset del encoder de giro // Turning encoder offset (valor 1//value 1)
+    this.m_turningAbsoluteEncoderInverted = (boolean) Arr[1]; // Invertir el encoder absoluto de giro // Invert turning absolute encoder (valor 2//value 2)
+    m_turningAbsoluteEncoder = new CANCoder((int) Arr[2]); // Encoder absoluto de giro // Turning absolute encoder (valor 3//value 3)
+
+    m_driveMotor = new CANSparkMax((int) Arr[3], MotorType.kBrushless); // Motor de manejo // Drive motor (valor 4//value 4)
+    m_turningMotor = new CANSparkMax((int) Arr[4], MotorType.kBrushless); // Motor de giro // Turning motor (valor 5//value 5)
+
+    m_driveMotor.setInverted((boolean) Arr[5]); // Invertir el motor de manejo // Invert drive motor (valor 6//value 6)
+    m_turningMotor.setInverted((boolean) Arr[6]); // Invertir el motor de giro // Invert turning motor (valor 7//value 7)
+
+    m_driveEncoder = m_driveMotor.getEncoder(); // Encoder de manejo // Drive encoder
+    m_turningEncoder = m_turningMotor.getEncoder(); // Encoder de giro // Turning encoder
+
+    // Configuracion de los encoders // Encoder configuration (Equivalencias de ticks de encoders a medidas // Encoder ticks to measurements equivalences)
+    m_driveEncoder.setPositionConversionFactor(Swerve.Module.kDriveEncoder_RotationToMeter); // Conversion de rotacion a metros // Rotation to meters conversion
+    m_driveEncoder.setVelocityConversionFactor(Swerve.Module.kDriveEncoder_RPMToMeterPerSecond); // Conversion de RPM a metros por segundo // RPM to meters per second conversion
+    m_turningEncoder.setPositionConversionFactor(Swerve.Module.kTurningEncoder_RotationToRadian); // Conversion de rotacion a radianes // Rotation to radians conversion
+    m_turningEncoder.setVelocityConversionFactor(Swerve.Module.kTurningEncoder_RPMToRadianPerSecond); // Conversion de RPM a radianes por segundo // RPM to radians per second conversion
+
+    m_turningPIDController = new PIDController(Swerve.Module.kPTurning, Swerve.Module.kITurning, Swerve.Module.kDTurning); // Configuracion del PID de giro // Turning PID configuration
+    m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI); // Habilitar la entrada continua // Enable continuous input
+    // Habilita que la llanta gire 360 grados // Enable 360 degrees wheel rotation
+
+    resetEncoders(); // Reiniciar los encoders // Reset encoders
+  }
+
+  public SwerveModulePosition getPosition() { // Obtener la posicion del modulo de Swerve // Get Swerve module position (Metros avanzados y giro // Meters moved and rotation)
+    return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getTurningPosition()));
+  }
+
+  public double getDrivePosition() { // Obtener la posicion del motor de manejo // Get drive motor position (Metros avanzados // Meters moved)
+    return m_driveEncoder.getPosition();
+  }
+
+  public double getTurningPosition() { // Obtener la posicion del motor de giro // Get turning motor position (Radianes girados // Radians rotated)
+    return m_turningEncoder.getPosition();
+  }
+
+  public double getDriveVelocity() { // Obtener la velocidad del motor de manejo // Get drive motor velocity (Metros por segundo // Meters per second)
+      return m_driveEncoder.getVelocity();
+  }
+
+  public double getTurningVelocity() { // Obtener la velocidad del motor de giro // Get turning motor velocity (Radianes por segundo // Radians per second)
+      return m_turningEncoder.getVelocity();
+  }
+
+  public double getAbsoluteEncoderRad() { // Obtener la posicion del encoder absoluto de giro // Get turning absolute encoder position (Radianes girados // Radians rotated)
+      double angle = m_turningAbsoluteEncoder.getAbsolutePosition();
+      angle *= 2.0 * Math.PI;
+      angle -= m_turningEncoderOffsetRad;
+      return angle * (m_turningAbsoluteEncoderInverted ? -1.0 : 1.0);
+  }
+
+  public void resetEncoders() { // Reiniciar los encoders // Reset encoders
+      m_driveEncoder.setPosition(0);
+      m_turningEncoder.setPosition(getAbsoluteEncoderRad());
+  }
+
+  public SwerveModuleState getState() { // Obtener el estado del modulo de Swerve // Get Swerve module state (Velocidad de manejo y giro // Drive and turning velocity)
+      return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
+  }
+
+  public void setDesiredState(SwerveModuleState state) { // Establecer el estado deseado del modulo de Swerve // Set Swerve module desired state 
+      if (Math.abs(state.speedMetersPerSecond) < 0.001) {
+          stop();
+          return;
+      }
+      state = SwerveModuleState.optimize(state, getState().angle); // Optimizar el estado deseado para girar la menor cantidad de grados // Optimize desired state to rotate the least amount of degrees
+      m_driveMotor.set(state.speedMetersPerSecond / Swerve.Physical.kMaxSpeedMetersPerSecond);
+      m_turningMotor.set(m_turningPIDController.calculate(getTurningPosition(), state.angle.getRadians()));
+  }
+
+  public void stop() { // Detener el modulo de Swerve // Stop Swerve module
+      m_driveMotor.set(0);
+      m_turningMotor.set(0);
+  }
+}

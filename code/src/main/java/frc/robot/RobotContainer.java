@@ -4,18 +4,22 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.Operator;
+import frc.robot.commands.Drive;
+import frc.robot.subsystems.Swerve;
 
 public class RobotContainer {
   // Aqui se declaran los subsistemas, comandos y controladores
   // Subsystems, commands and controllers are declared here
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem(); ///////////
 
+  private final Swerve m_swerve = new Swerve();
+
   // Declaracion de un control de xbox (Se puede cambiar a PS4 o Joystick)
-  private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController m_driverController = new CommandXboxController(Operator.kDriverControllerPort);
 
   // Declaracion de los Triggers
   // Triggers are declared here
@@ -24,7 +28,8 @@ public class RobotContainer {
   // Declaracion de commandos por defecto y mappeos del control
   // Default commands and control bindings are declared here
   public RobotContainer() {
-
+    // Al subsistema de Swerve se le asigna el comando de Drive por default y se pasan los parametros
+    m_swerve.setDefaultCommand(new Drive(m_swerve, () -> m_driverController.getLeftX(), () -> m_driverController.getLeftY(), () -> m_driverController.getRightX()));
 
     // Configure the trigger bindings
     configureBindings();
