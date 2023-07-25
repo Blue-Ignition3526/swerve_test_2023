@@ -16,7 +16,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition; // Importar el Swerve
 import edu.wpi.first.math.kinematics.SwerveModuleState; // Importar el SwerveModuleState // Import SwerveModuleState
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase; // Importar el SubsystemBase // Import SubsystemBase
-import com.team3526.lib.swerve.ModulePIDParameters; // Importar el ModulePIDParameters // Import ModulePIDParameters
 
 public class SwerveModule extends SubsystemBase {
 
@@ -123,12 +122,12 @@ public class SwerveModule extends SubsystemBase {
     m_PID_I = ModulePIDParameters.m_PID_I;
     m_PID_D = ModulePIDParameters.m_PID_D;
 
-    SmartDashboard.putString("Module State", getState().toString());
-    SmartDashboard.putString("Module Position", getPosition().toString());
-    SmartDashboard.putNumber("Module Speed", getDriveVelocity());
-    SmartDashboard.putNumber("Module Turning Speed", getTurningVelocity());
-    SmartDashboard.putNumber("Drive Encoder", getDrivePosition());
-    SmartDashboard.putNumber("Turning Encoder", getTurningPosition());
-    SmartDashboard.putNumber("Turning Absolute Encoder", getAbsoluteEncoderRad());
+    SmartDashboard.putString(m_name+" Module State", getState().toString());
+    SmartDashboard.putString(m_name+" Module Position", getPosition().toString());
+    SmartDashboard.putNumber(m_name+" Module Speed", getDriveVelocity());
+    SmartDashboard.putNumber(m_name+" Module Turning Speed", getTurningVelocity());
+    SmartDashboard.putNumber(m_name+" Drive Encoder", getDrivePosition());
+    SmartDashboard.putNumber(m_name+" Turning Encoder", getTurningPosition());
+    SmartDashboard.putNumber(m_name+" Turning Absolute Encoder", getAbsoluteEncoderRad());
   }
 }
