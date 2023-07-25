@@ -14,7 +14,9 @@ import edu.wpi.first.math.controller.PIDController; // Importar el PIDController
 import edu.wpi.first.math.geometry.Rotation2d; // Importar el Rotation2d // Import Rotation2d
 import edu.wpi.first.math.kinematics.SwerveModulePosition; // Importar el SwerveModulePosition // Import SwerveModulePosition
 import edu.wpi.first.math.kinematics.SwerveModuleState; // Importar el SwerveModuleState // Import SwerveModuleState
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase; // Importar el SubsystemBase // Import SubsystemBase
+import com.team3526.lib.swerve.ModulePIDParameters; // Importar el ModulePIDParameters // Import ModulePIDParameters
 
 public class SwerveModule extends SubsystemBase {
 
@@ -29,6 +31,12 @@ public class SwerveModule extends SubsystemBase {
   private final CANCoder m_turningAbsoluteEncoder; // Encoder absoluto de giro // Turning absolute encoder
   private final boolean m_turningAbsoluteEncoderInverted; // Invertir el encoder absoluto de giro // Invert turning absolute encoder
   private final double m_turningEncoderOffsetRad; // Offset del encoder de giro // Turning encoder offset
+
+  private final String m_name; // Nombre del modulo // Module name
+
+  private double m_PID_P = ModulePIDParameters.m_PID_P; // Constante P del PID de giro // Turning PID P constant
+  private double m_PID_I = ModulePIDParameters.m_PID_I; // Constante I del PID de giro // Turning PID I constant
+  private double m_PID_D = ModulePIDParameters.m_PID_D; // Constante D del PID de giro // Turning PID D constant
 
   public SwerveModule(Object[] Arr) { // Constructor del modulo de Swerve // Swerve module constructor
     this.m_turningEncoderOffsetRad = (double) Arr[0]; // Offset del encoder de giro // Turning encoder offset (valor 1//value 1)
@@ -50,9 +58,10 @@ public class SwerveModule extends SubsystemBase {
     m_turningEncoder.setPositionConversionFactor(Swerve.Module.kTurningEncoder_RotationToRadian); // Conversion de rotacion a radianes // Rotation to radians conversion
     m_turningEncoder.setVelocityConversionFactor(Swerve.Module.kTurningEncoder_RPMToRadianPerSecond); // Conversion de RPM a radianes por segundo // RPM to radians per second conversion
 
-    m_turningPIDController = new PIDController(Swerve.Module.kPTurning, Swerve.Module.kITurning, Swerve.Module.kDTurning); // Configuracion del PID de giro // Turning PID configuration
+    m_turningPIDController = new PIDController(m_PID_P, m_PID_I, m_PID_D); // Configuracion del PID de giro // Turning PID configuration
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI); // Habilitar la entrada continua // Enable continuous input
     // Habilita que la llanta gire 360 grados // Enable 360 degrees wheel rotation
+    m_name = (String) Arr[7]; // Nombre del modulo de Swerve // Swerve module name (valor 8//value 8)
 
     resetEncoders(); // Reiniciar los encoders // Reset encoders
   }
@@ -106,5 +115,20 @@ public class SwerveModule extends SubsystemBase {
   public void stop() { // Detener el modulo de Swerve // Stop Swerve module
       m_driveMotor.set(0);
       m_turningMotor.set(0);
+  }
+  
+  @Override
+  public void periodic () { // Periodo de ejecucion // Execution period
+    m_PID_P = ModulePIDParameters.m_PID_P;
+    m_PID_I = ModulePIDParameters.m_PID_I;
+    m_PID_D = ModulePIDParameters.m_PID_D;
+
+    SmartDashboard.putString("Module State", getState().toString());
+    SmartDashboard.putString("Module Position", getPosition().toString());
+    SmartDashboard.putNumber("Module Speed", getDriveVelocity());
+    SmartDashboard.putNumber("Module Turning Speed", getTurningVelocity());
+    SmartDashboard.putNumber("Drive Encoder", getDrivePosition());
+    SmartDashboard.putNumber("Turning Encoder", getTurningPosition());
+    SmartDashboard.putNumber("Turning Absolute Encoder", getAbsoluteEncoderRad());
   }
 }

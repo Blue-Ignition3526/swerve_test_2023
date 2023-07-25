@@ -21,10 +21,6 @@ public final class Constants {
 
       public static final double kTurningEncoder_RotationToRadian = kTurningMotorGearRatio * 2.0 * Math.PI; // Conversion Rotaciones a Radianes
       public static final double kTurningEncoder_RPMToRadianPerSecond = kTurningEncoder_RotationToRadian / 60.0; // Conversion RPM a Radianes por Segundo
-
-      public static final double kPTurning = 0.5; // PID Turning Proportional
-      public static final double kITurning = 0.0; // PID Turning Integral
-      public static final double kDTurning = 0.0; // PID Turning Derivative
     }
 
     public final static class Physical {
@@ -54,7 +50,8 @@ public final class Constants {
         6, // Drive Motor ID
         7, // Turning Motor ID
         true, // Drive Motor Inverted
-        true // Turning Motor Inverted
+        true, // Turning Motor Inverted
+        "Front Left" // Name
       };
       public static final Object[] kBackLeftVars = {
         0, // Offset
@@ -63,7 +60,8 @@ public final class Constants {
         10, // Drive Motor ID
         11, // Turning Motor ID
         true, // Drive Motor Inverted
-        true // Turning Motor Inverted
+        true, // Turning Motor Inverted
+        "Back Left" // Name
       };
       public static final Object[] kFrontRightVars = {
         0, // Offset
@@ -72,7 +70,8 @@ public final class Constants {
         8, // Drive Motor ID
         9, // Turning Motor ID
         false, // Drive Motor Inverted
-        true // Turning Motor Inverted
+        true, // Turning Motor Inverted
+        "Front Right" // Name
       };
       public static final Object[] kBackRightVars = {
         0, // Offset
@@ -81,7 +80,8 @@ public final class Constants {
         12, // Drive Motor ID
         13, // Turning Motor ID
         false, // Drive Motor Inverted
-        true // Turning Motor Inverted
+        true, // Turning Motor Inverted
+        "Back Right" // Name
       };
     }
   }

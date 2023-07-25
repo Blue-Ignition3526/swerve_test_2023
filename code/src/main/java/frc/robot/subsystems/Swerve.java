@@ -6,6 +6,7 @@ package frc.robot.subsystems; // Nombre del paquete donde se encuentra el archiv
 
 // Imports
 import com.kauailabs.navx.frc.AHRS; // Libreria para la NAVX // Library for the NAVX
+import com.team3526.lib.swerve.ModulePIDParameters;
 import com.team3526.lib.swerve.SwerveModule; // Libreria para los modulos de Swerve // Library for Swerve modules
 import frc.robot.Constants.Swerve.Motors; // Clase con los puertos de los motores y sus caracteristicas // Class with the motor ports and their characteristics
 import frc.robot.Constants.Swerve.Physical; // Clase con las medidas fisicas del robot // Class with the physical measurements of the robot
@@ -86,8 +87,13 @@ public class Swerve extends SubsystemBase {
 
   @Override
   public void periodic() { // Se actualiza la odometria y se muestra en el SmartDashboard // Odometry is updated and displayed on the SmartDashboard
+    ModulePIDParameters.m_PID_P = SmartDashboard.getNumber("PID_P", ModulePIDParameters.m_PID_P);
+    ModulePIDParameters.m_PID_I = SmartDashboard.getNumber("PID_I", ModulePIDParameters.m_PID_I);
+    ModulePIDParameters.m_PID_D = SmartDashboard.getNumber("PID_D", ModulePIDParameters.m_PID_D);
+
     odometer.update(getRotation2d(), getSwervePositions());
-    SmartDashboard.putNumber("Robot Direction", getAngle());
+    SmartDashboard.putNumber("Robot Angle", getAngle());
     SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+    SmartDashboard.putString("Robot Rotation", getRotation2d().toString());
   }
 }
