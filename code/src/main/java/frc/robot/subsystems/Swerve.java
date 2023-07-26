@@ -6,8 +6,8 @@ package frc.robot.subsystems; // Nombre del paquete donde se encuentra el archiv
 
 // Imports
 import com.kauailabs.navx.frc.AHRS; // Libreria para la NAVX // Library for the NAVX
-import com.team3526.lib.swerve.ModulePIDParameters;
-import com.team3526.lib.swerve.SwerveModule; // Libreria para los modulos de Swerve // Library for Swerve modules
+import org.team3526.lib.swerve.ModulePIDParameters;
+import org.team3526.lib.swerve.SwerveModule; // Libreria para los modulos de Swerve // Library for Swerve modules
 import frc.robot.Constants.Swerve.Motors; // Clase con los puertos de los motores y sus caracteristicas // Class with the motor ports and their characteristics
 import frc.robot.Constants.Swerve.Physical; // Clase con las medidas fisicas del robot // Class with the physical measurements of the robot
 import edu.wpi.first.math.geometry.Pose2d; // Libreria para la posicion // Library for the position

@@ -4,7 +4,10 @@
 
 package frc.robot;
 
+import org.team3526.lib.swerve.TrajectoryGenerator;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Operator;
@@ -46,6 +49,7 @@ public class RobotContainer {
   // Aqui se regresa el comando autonomo a ejecutar
   // Here the autonomous command to run is returned
   public Command getAutonomousCommand() {
-    return null;
+    SwerveControllerCommand autonPath = TrajectoryGenerator.newTrajectory("paths/Basic.wpilib.json", m_swerve);
+    return autonPath;
   }
 }

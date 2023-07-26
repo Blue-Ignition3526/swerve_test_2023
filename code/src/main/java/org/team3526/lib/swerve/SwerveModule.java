@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////
 // Code to declare a single Swerve module
 
-package com.team3526.lib.swerve; // Nombre del paquete donde se encuentra el modulo // Package name where the module is located
+package org.team3526.lib.swerve; // Nombre del paquete donde se encuentra el modulo // Package name where the module is located
  
 // Imports
 import frc.robot.Constants.Swerve; // Importar las constantes de Swerve // Import Swerve constants

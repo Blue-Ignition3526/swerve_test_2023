@@ -1,4 +1,4 @@
-package com.team3526.lib.swerve;
+package org.team3526.lib.swerve;
 
 public class ModulePIDParameters {
     public static double m_PID_P = 0.5;
