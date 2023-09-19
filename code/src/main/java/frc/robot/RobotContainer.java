@@ -9,7 +9,6 @@ import org.team3526.lib.swerve.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Operator;
 import frc.robot.commands.Swerve.Drive;
 import frc.robot.subsystems.Swerve;

@@ -16,7 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics; // Libreria para la 
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry; // Libreria para la odometria de Swerve // Library for Swerve odometry
 import edu.wpi.first.math.kinematics.SwerveModulePosition; // Libreria para la posicion de los modulos // Library for the position of the modules
 import edu.wpi.first.math.kinematics.SwerveModuleState; // Libreria para el estado de los modulos // Library for the state of the modules
-import edu.wpi.first.wpilibj.SPI; // Libreria para el puerto SPI // Library for the SPI port
+import edu.wpi.first.wpilibj.I2C; // Libreria para el puerto SPI // Library for the SPI port
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; // Libreria para el SmartDashboard // Library for the SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase; // Libreria para el Subsistema // Library for the Subsystem
 
@@ -28,7 +28,7 @@ public class Swerve extends SubsystemBase {
   private final SwerveModule m_backLeft = new SwerveModule(Motors.kBackLeftVars);
   private final SwerveModule m_backRight = new SwerveModule(Motors.kBackRightVars);
 
-  private final AHRS m_gyro = new AHRS(SPI.Port.kMXP); // Se declara la NAVX // The NAVX is declared
+  private final AHRS m_gyro = new AHRS(I2C.Port.kMXP); // Se declara la NAVX // The NAVX is declared
   private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(Physical.kDriveKinematics, getRotation2d(), getSwervePositions()); // Se declara la odometria // Odometry is declared
 
   public Swerve() { 
