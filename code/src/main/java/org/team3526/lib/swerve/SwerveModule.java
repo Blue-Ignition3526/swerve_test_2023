@@ -38,8 +38,8 @@ public class SwerveModule extends SubsystemBase {
   private double m_PID_D = ModulePIDParameters.m_PID_D; // Constante D del PID de giro // Turning PID D constant
 
   public SwerveModule(Object[] Arr) { // Constructor del modulo de Swerve // Swerve module constructor
-    this.m_turningEncoderOffsetRad = (double) Arr[0]; // Offset del encoder de giro // Turning encoder offset (valor 1//value 1)
-    this.m_turningAbsoluteEncoderInverted = (boolean) Arr[1]; // Invertir el encoder absoluto de giro // Invert turning absolute encoder (valor 2//value 2)
+    m_turningEncoderOffsetRad = (double) Arr[0]; // Offset del encoder de giro // Turning encoder offset (valor 1//value 1)
+    m_turningAbsoluteEncoderInverted = (boolean) Arr[1]; // Invertir el encoder absoluto de giro // Invert turning absolute encoder (valor 2//value 2)
     m_turningAbsoluteEncoder = new CANCoder((int) Arr[2]); // Encoder absoluto de giro // Turning absolute encoder (valor 3//value 3)
 
     m_driveMotor = new CANSparkMax((int) Arr[3], MotorType.kBrushless); // Motor de manejo // Drive motor (valor 4//value 4)
@@ -87,7 +87,7 @@ public class SwerveModule extends SubsystemBase {
 
   public double getAbsoluteEncoderRad() { // Obtener la posicion del encoder absoluto de giro // Get turning absolute encoder position (Radianes girados // Radians rotated)
       double angle = m_turningAbsoluteEncoder.getAbsolutePosition();
-      angle *= 2.0 * Math.PI;
+      angle *= Math.PI/180.0;
       angle -= m_turningEncoderOffsetRad;
       return angle * (m_turningAbsoluteEncoderInverted ? -1.0 : 1.0);
   }
@@ -128,6 +128,7 @@ public class SwerveModule extends SubsystemBase {
     SmartDashboard.putNumber(m_name+" Module Turning Speed", getTurningVelocity());
     SmartDashboard.putNumber(m_name+" Drive Encoder", getDrivePosition());
     SmartDashboard.putNumber(m_name+" Turning Encoder", getTurningPosition());
+    SmartDashboard.putNumber(m_name+" Turning Absolute Encoder Direct", m_turningAbsoluteEncoder.getAbsolutePosition());
     SmartDashboard.putNumber(m_name+" Turning Absolute Encoder", getAbsoluteEncoderRad());
   }
 }

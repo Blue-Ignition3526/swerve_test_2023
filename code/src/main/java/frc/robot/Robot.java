@@ -8,6 +8,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -30,6 +32,12 @@ public class Robot extends TimedRobot {
     // Command scheduler corre los comandos declarados en RobotContainer
     // Command scheduler runs the commands declared in RobotContainer
     CommandScheduler.getInstance().run();
+    // Iniciar DataLog para guardar datos en un archivo
+    // Start DataLog to save data in a file
+    DataLogManager.start();
+    // Capturar datos de la Driver Station
+    // Capture data from the Driver Station
+    DriverStation.startDataLog(DataLogManager.getLog());
   }
 
   // Codigo que corre una vez cuando el robot se deshabilita

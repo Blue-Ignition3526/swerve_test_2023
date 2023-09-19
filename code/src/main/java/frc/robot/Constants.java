@@ -47,11 +47,11 @@ public final class Constants {
 
       public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kTeleopMaxAngularSpeedRadiansPerSecond, kTeleopMaxAngularAccelerationUnitsPerSecond);
-    }
+      }
 
     public final static class Motors { // Motor IDs
       public static final Object[] kFrontLeftVars = { 
-        0, // Offset
+        0.0, // Offset
         false, // Inverted
         2, // Absolute Encoder ID
         6, // Drive Motor ID
@@ -61,7 +61,7 @@ public final class Constants {
         "Front Left" // Name
       };
       public static final Object[] kBackLeftVars = {
-        0, // Offset
+        -0.6059, // Offset
         false, // Inverted
         4, // Absolute Encoder ID
         10, // Drive Motor ID
@@ -71,7 +71,7 @@ public final class Constants {
         "Back Left" // Name
       };
       public static final Object[] kFrontRightVars = {
-        0, // Offset
+        -2.6154, // Offset
         false, // Inverted
         3, // Absolute Encoder ID
         8, // Drive Motor ID
@@ -81,7 +81,7 @@ public final class Constants {
         "Front Right" // Name
       };
       public static final Object[] kBackRightVars = {
-        0, // Offset
+        0.0, // Offset
         false, // Inverted
         5, // Absolute Encoder ID
         12, // Drive Motor ID

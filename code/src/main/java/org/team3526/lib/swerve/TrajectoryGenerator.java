@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.Swerve.Physical;
 import frc.robot.subsystems.Swerve;
-
 public class TrajectoryGenerator {
     public static Trajectory trajectory = new Trajectory();
 
