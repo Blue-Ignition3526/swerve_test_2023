@@ -66,7 +66,7 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public SwerveModulePosition getPosition() { // Obtener la posicion del modulo de Swerve // Get Swerve module position (Metros avanzados y giro // Meters moved and rotation)
-    return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getTurningPosition()));
+    return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAbsoluteEncoderRad()));
   }
 
   public double getDrivePosition() { // Obtener la posicion del motor de manejo // Get drive motor position (Metros avanzados // Meters moved)
@@ -98,7 +98,7 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public SwerveModuleState getState() { // Obtener el estado del modulo de Swerve // Get Swerve module state (Velocidad de manejo y giro // Drive and turning velocity)
-      return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
+      return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad()));
   }
 
   public void setDesiredState(SwerveModuleState state) { // Establecer el estado deseado del modulo de Swerve // Set Swerve module desired state 
@@ -108,7 +108,7 @@ public class SwerveModule extends SubsystemBase {
       }
       state = SwerveModuleState.optimize(state, getState().angle); // Optimizar el estado deseado para girar la menor cantidad de grados // Optimize desired state to rotate the least amount of degrees
       m_driveMotor.set(state.speedMetersPerSecond / Swerve.Physical.kMaxSpeedMetersPerSecond);
-      m_turningMotor.set(m_turningPIDController.calculate(getTurningPosition(), state.angle.getRadians()));
+      m_turningMotor.set(m_turningPIDController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians()));
   }
 
   public void stop() { // Detener el modulo de Swerve // Stop Swerve module
