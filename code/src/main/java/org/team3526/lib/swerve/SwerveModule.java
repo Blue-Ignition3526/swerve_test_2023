@@ -4,6 +4,7 @@
 
 package org.team3526.lib.swerve; // Nombre del paquete donde se encuentra el modulo // Package name where the module is located
  
+import frc.robot.Constants;
 // Imports
 import frc.robot.Constants.Swerve; // Importar las constantes de Swerve // Import Swerve constants
 import com.ctre.phoenix.sensors.CANCoder; // Importar el CANCoder // Import CANCoder
@@ -37,6 +38,8 @@ public class SwerveModule extends SubsystemBase {
   private double m_PID_I = ModulePIDParameters.m_PID_I; // Constante I del PID de giro // Turning PID I constant
   private double m_PID_D = ModulePIDParameters.m_PID_D; // Constante D del PID de giro // Turning PID D constant
 
+  private double m_startingAbsoluteAngle;
+
   public SwerveModule(Object[] Arr) { // Constructor del modulo de Swerve // Swerve module constructor
     m_turningEncoderOffsetRad = (double) Arr[0]; // Offset del encoder de giro // Turning encoder offset (valor 1//value 1)
     m_turningAbsoluteEncoderInverted = (boolean) Arr[1]; // Invertir el encoder absoluto de giro // Invert turning absolute encoder (valor 2//value 2)
@@ -62,11 +65,19 @@ public class SwerveModule extends SubsystemBase {
     // Habilita que la llanta gire 360 grados // Enable 360 degrees wheel rotation
     m_name = (String) Arr[7]; // Nombre del modulo de Swerve // Swerve module name (valor 8//value 8)
 
+    m_startingAbsoluteAngle = Math.toRadians(m_turningAbsoluteEncoder.getAbsolutePosition());
+
+    SmartDashboard.putNumber(m_name + " Starting Angle", m_startingAbsoluteAngle);
+
     resetEncoders(); // Reiniciar los encoders // Reset encoders
   }
 
+  public double getStartingAbsoluteAngle() {
+    return m_startingAbsoluteAngle;
+  }
+
   public SwerveModulePosition getPosition() { // Obtener la posicion del modulo de Swerve // Get Swerve module position (Metros avanzados y giro // Meters moved and rotation)
-    return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAbsoluteEncoderRad()));
+    return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getTurningPosition()));
   }
 
   public double getDrivePosition() { // Obtener la posicion del motor de manejo // Get drive motor position (Metros avanzados // Meters moved)
@@ -74,7 +85,7 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public double getTurningPosition() { // Obtener la posicion del motor de giro // Get turning motor position (Radianes girados // Radians rotated)
-    return m_turningEncoder.getPosition();
+    return m_turningEncoder.getPosition() % (2 * Math.PI);
   }
 
   public double getDriveVelocity() { // Obtener la velocidad del motor de manejo // Get drive motor velocity (Metros por segundo // Meters per second)
@@ -87,18 +98,19 @@ public class SwerveModule extends SubsystemBase {
 
   public double getAbsoluteEncoderRad() { // Obtener la posicion del encoder absoluto de giro // Get turning absolute encoder position (Radianes girados // Radians rotated)
       double angle = m_turningAbsoluteEncoder.getAbsolutePosition();
-      angle *= Math.PI/180.0;
+      angle = Math.toRadians(angle);
       angle -= m_turningEncoderOffsetRad;
       return angle * (m_turningAbsoluteEncoderInverted ? -1.0 : 1.0);
   }
 
   public void resetEncoders() { // Reiniciar los encoders // Reset encoders
       m_driveEncoder.setPosition(0);
+      m_turningEncoder.setPositionConversionFactor(Constants.Swerve.Module.kTurningEncoder_RotationToRadian);
       m_turningEncoder.setPosition(getAbsoluteEncoderRad());
   }
 
   public SwerveModuleState getState() { // Obtener el estado del modulo de Swerve // Get Swerve module state (Velocidad de manejo y giro // Drive and turning velocity)
-      return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad()));
+      return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
   }
 
   public void setDesiredState(SwerveModuleState state) { // Establecer el estado deseado del modulo de Swerve // Set Swerve module desired state 
@@ -106,9 +118,10 @@ public class SwerveModule extends SubsystemBase {
           stop();
           return;
       }
+      state = new SwerveModuleState(state.speedMetersPerSecond, state.angle.minus(new Rotation2d(m_startingAbsoluteAngle - m_turningEncoderOffsetRad)));
       state = SwerveModuleState.optimize(state, getState().angle); // Optimizar el estado deseado para girar la menor cantidad de grados // Optimize desired state to rotate the least amount of degrees
       m_driveMotor.set(state.speedMetersPerSecond / Swerve.Physical.kMaxSpeedMetersPerSecond);
-      m_turningMotor.set(m_turningPIDController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians()));
+      m_turningMotor.set(m_turningPIDController.calculate(getTurningPosition(), state.angle.getRadians()));
   }
 
   public void stop() { // Detener el modulo de Swerve // Stop Swerve module

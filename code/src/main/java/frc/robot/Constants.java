@@ -51,7 +51,7 @@ public final class Constants {
 
     public final static class Motors { // Motor IDs
       public static final Object[] kFrontLeftVars = { 
-        0.0, // Offset
+        0.914036214351654, // Offset
         false, // Inverted
         2, // Absolute Encoder ID
         6, // Drive Motor ID
@@ -66,12 +66,12 @@ public final class Constants {
         4, // Absolute Encoder ID
         10, // Drive Motor ID
         11, // Turning Motor ID
-        true, // Drive Motor Inverted
+        false, // Drive Motor Inverted
         true, // Turning Motor Inverted
         "Back Left" // Name
       };
       public static final Object[] kFrontRightVars = {
-        0.0, // Offset
+        1.529450297355652, // Offset
         false, // Inverted
         3, //[] Absolute Encoder ID
         8, // Drive Motor ID
