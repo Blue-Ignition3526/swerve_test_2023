@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.team3526.lib.util.Conversions;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -13,7 +15,7 @@ public final class Constants {
   public final static class Swerve {
 
     public static final class Module {
-      public static final double kWheelDiameterMeters = 0.1016; // 4 inches
+      public static final double kWheelDiameterMeters = Conversions.inchToM(4.0); // 4 inches
       public static final double kDriveMotorGearRatio = 1.0 / 6.12; // 6.12:1 Drive
       public static final double kTurningMotorGearRatio = 1.0 / 12.8; // 12.8:1 Steering
 
@@ -25,25 +27,31 @@ public final class Constants {
     }
 
     public final static class Physical {
-      public static final double kTrackWidth = 0.5842; // Distance between right and left wheels
-      public static final double kWheelBase = 0.5842; // Distance between front and back wheels
+      public static final double kTrackWidth = Conversions.mmToM(579.12); // Distance between right and left wheels && front and back wheels
+
+      private static final Translation2d m_frontLeftLocation = new Translation2d(kTrackWidth/2, kTrackWidth/2); // Front Left Wheel Location
+      private static final Translation2d m_frontRightLocation = new Translation2d(kTrackWidth/2, -kTrackWidth/2); // Front Right Wheel Location
+      private static final Translation2d m_backLeftLocation = new Translation2d(-kTrackWidth/2, kTrackWidth/2); // Back Left Wheel Location
+      private static final Translation2d m_backRightLocation = new Translation2d(-kTrackWidth/2, -kTrackWidth/2); // Back Right Wheel Location
+
       public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics( // Kinematics
-        new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-        new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
-        new Translation2d(-kWheelBase / 2, kTrackWidth / 2));
+        m_frontLeftLocation,
+        m_frontRightLocation,
+        m_backLeftLocation,
+        m_backRightLocation
+      );
 
       public static final double kMaxSpeedMetersPerSecond = 5.0; // Maxima Velocidad en Metros por Segundo
-      public static final double kMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI; // Maxima Velocidad Angular en Radianes por Segundo
+      public static final double kMaxAngularSpeedRadiansPerSecond = 2.0 * 2.0 * Math.PI; // Maxima Velocidad Angular en Radianes por Segundo
 
-      public static final double kMaxAccelerationUnitsPerSecond = 3; // Maxima Aceleracion
-      public static final double kMaxAngularAccelerationUnitsPerSecond = Math.PI / 4; // Maxima Aceleracion Angular
+      public static final double kMaxAccelerationUnitsPerSecond = 3.0; // Maxima Aceleracion
+      public static final double kMaxAngularAccelerationUnitsPerSecond = Math.PI / 4.0; // Maxima Aceleracion Angular
 
-      public static final double kTeleopMaxSpeedMetersPerSecond = kMaxSpeedMetersPerSecond / 4; // Maxima Velocidad en Metros por Segundo
-      public static final double kTeleopMaxAngularSpeedRadiansPerSecond = kMaxAngularSpeedRadiansPerSecond / 4; // Maxima Velocidad Angular en Radianes por Segundo
+      public static final double kTeleopMaxSpeedMetersPerSecond = kMaxSpeedMetersPerSecond / 4.0; // Maxima Velocidad en Metros por Segundo
+      public static final double kTeleopMaxAngularSpeedRadiansPerSecond = kMaxAngularSpeedRadiansPerSecond / 4.0; // Maxima Velocidad Angular en Radianes por Segundo
 
-      public static final double kTeleopMaxAccelerationUnitsPerSecond = 3; // Maxima Aceleracion
-      public static final double kTeleopMaxAngularAccelerationUnitsPerSecond = 3; // Maxima Aceleracion Angular
+      public static final double kTeleopMaxAccelerationUnitsPerSecond = 3.0; // Maxima Aceleracion
+      public static final double kTeleopMaxAngularAccelerationUnitsPerSecond = 3.0; // Maxima Aceleracion Angular
 
       public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kTeleopMaxAngularSpeedRadiansPerSecond, kTeleopMaxAngularAccelerationUnitsPerSecond);
@@ -61,7 +69,7 @@ public final class Constants {
         "Front Left" // Name
       };
       public static final Object[] kBackLeftVars = {
-        -0.6059, // Offset
+        0.0, // Offset
         false, // Inverted
         4, // Absolute Encoder ID
         10, // Drive Motor ID
@@ -71,7 +79,7 @@ public final class Constants {
         "Back Left" // Name
       };
       public static final Object[] kFrontRightVars = {
-        -2.6154, // Offset
+        0, // Offset
         false, // Inverted
         3, // Absolute Encoder ID
         8, // Drive Motor ID
