@@ -4,6 +4,7 @@
 
 package org.team3526.lib.swerve; 
  
+import frc.robot.Constants;
 // Imports
 import frc.robot.Constants.Swerve;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -105,7 +106,7 @@ public class SwerveModule extends SubsystemBase {
    */
   public double getAbsoluteEncoderRad() {
       double angle = m_turningAbsoluteEncoder.getAbsolutePosition();
-      angle *= Math.PI/180.0;
+      angle = Math.toRadians(angle);
       angle -= m_turningEncoderOffsetRad;
       return angle * (m_turningAbsoluteEncoderInverted ? -1.0 : 1.0);
   }
@@ -116,6 +117,7 @@ public class SwerveModule extends SubsystemBase {
   */
   public void resetEncoders() {
       m_driveEncoder.setPosition(0);
+      m_turningEncoder.setPositionConversionFactor(Constants.Swerve.Module.kTurningEncoder_RotationToRadian);
       m_turningEncoder.setPosition(getAbsoluteEncoderRad());
   }
 
