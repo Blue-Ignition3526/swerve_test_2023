@@ -3,8 +3,7 @@
 // Code to declare a single Swerve module
 
 package org.team3526.lib.swerve; // Nombre del paquete donde se encuentra el modulo // Package name where the module is located
- 
-import frc.robot.Constants;
+
 // Imports
 import frc.robot.Constants.Swerve; // Importar las constantes de Swerve // Import Swerve constants
 import com.ctre.phoenix.sensors.CANCoder; // Importar el CANCoder // Import CANCoder
@@ -99,14 +98,16 @@ public class SwerveModule extends SubsystemBase {
   public double getAbsoluteEncoderRad() { // Obtener la posicion del encoder absoluto de giro // Get turning absolute encoder position (Radianes girados // Radians rotated)
       double angle = m_turningAbsoluteEncoder.getAbsolutePosition();
       angle = Math.toRadians(angle);
-      angle -= m_turningEncoderOffsetRad;
-      return angle * (m_turningAbsoluteEncoderInverted ? -1.0 : 1.0);
+      if (m_turningAbsoluteEncoderInverted) {
+        return angle * -1;
+      } else {
+        return angle;
+      }
   }
 
   public void resetEncoders() { // Reiniciar los encoders // Reset encoders
       m_driveEncoder.setPosition(0);
-      m_turningEncoder.setPositionConversionFactor(Constants.Swerve.Module.kTurningEncoder_RotationToRadian);
-      m_turningEncoder.setPosition(getAbsoluteEncoderRad());
+      m_turningEncoder.setPosition(0);
   }
 
   public SwerveModuleState getState() { // Obtener el estado del modulo de Swerve // Get Swerve module state (Velocidad de manejo y giro // Drive and turning velocity)
@@ -118,7 +119,7 @@ public class SwerveModule extends SubsystemBase {
           stop();
           return;
       }
-      state = new SwerveModuleState(state.speedMetersPerSecond, state.angle.minus(new Rotation2d(m_startingAbsoluteAngle - m_turningEncoderOffsetRad)));
+      state = new SwerveModuleState(state.speedMetersPerSecond, state.angle.minus(new Rotation2d(m_startingAbsoluteAngle + m_turningEncoderOffsetRad)));
       state = SwerveModuleState.optimize(state, getState().angle); // Optimizar el estado deseado para girar la menor cantidad de grados // Optimize desired state to rotate the least amount of degrees
       m_driveMotor.set(state.speedMetersPerSecond / Swerve.Physical.kMaxSpeedMetersPerSecond);
       m_turningMotor.set(m_turningPIDController.calculate(getTurningPosition(), state.angle.getRadians()));

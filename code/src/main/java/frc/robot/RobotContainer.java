@@ -42,7 +42,7 @@ public class RobotContainer {
     // Commands are binded to controller buttons here
     // m_oc_aButton.whileTrue(new ExampleCommand(m_exampleSubsystem)); ///////////
     
-    
+    m_driverController.rightTrigger(Constants.Operator.kDeadzone).whileTrue(new Drive(m_swerve, () -> 0.0, () -> m_driverController.getRightTriggerAxis() * -1, () -> 0.0));
   }
 
   // Aqui se regresa el comando autonomo a ejecutar

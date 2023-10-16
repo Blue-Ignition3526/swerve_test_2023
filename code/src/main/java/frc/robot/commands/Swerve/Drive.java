@@ -9,6 +9,7 @@ import java.util.function.Supplier; // Libreria para Supplier // Library for Sup
 import edu.wpi.first.math.filter.SlewRateLimiter; // Libreria para SlewRateLimiter // Library for SlewRateLimiter
 import edu.wpi.first.math.kinematics.ChassisSpeeds; // Libreria para ChassisSpeeds // Library for ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveModuleState; // Libreria para SwerveModuleState // Library for SwerveModuleState
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase; // Libreria para CommandBase // Library for CommandBase
 import frc.robot.Constants.Operator; // Libreria para Constantes de Operator // Library for Operator Constants
 import frc.robot.Constants.Swerve.Physical; // Libreria para Constantes de Swerve de Fisica // Library for Swerve's Physics Constants' 
@@ -18,6 +19,7 @@ public class Drive extends CommandBase {
   private final Swerve m_swerve; // Declarar el subsistema de Swerve // Declare Swerve subsystem
   private final Supplier<Double> xSpeed, ySpeed, rotSpeed; // Declarar los Suppliers // Declare Suppliers
   private final SlewRateLimiter xLimiter, yLimiter, rotLimiter; // Declarar los SlewRateLimiters // Declare SlewRateLimiters (Limitadores de aceleracion // Acceleration limiters)
+  private double moveAngle;
 
   public Drive(Swerve m_swerve, Supplier<Double> xSpeed, Supplier<Double> ySpeed, Supplier<Double> rotSpeed) {
     this.m_swerve = m_swerve;
@@ -35,9 +37,12 @@ public class Drive extends CommandBase {
 
   @Override
   public void execute() {
+
     double xSpeed = this.xSpeed.get(); // Obtener los valores de los Suppliers // Get the values from the Suppliers
     double ySpeed = this.ySpeed.get();
     double rotSpeed = this.rotSpeed.get();
+
+    moveAngle = Math.atan(ySpeed/xSpeed);
 
     xSpeed = Math.abs(xSpeed) > Operator.kDeadzone ? xSpeed : 0.0; // Aplicar la zona muerta // Apply deadzone
     ySpeed = Math.abs(ySpeed) > Operator.kDeadzone ? ySpeed : 0.0;
@@ -51,6 +56,8 @@ public class Drive extends CommandBase {
     m_chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, m_swerve.getRotation2d()); // Aplicar la velocidad del chasis // Put chassis speed
     SwerveModuleState[] m_moduleStates = Physical.kDriveKinematics.toSwerveModuleStates(m_chassisSpeeds); // Calcular las velocidades de los modulos // Calculate modules' speeds
     m_swerve.setModuleStates(m_moduleStates); // Aplicar la velocidad de los modulos // Put modules speed
+
+    SmartDashboard.putNumber("Controller Direction", moveAngle);
   }
 
   @Override

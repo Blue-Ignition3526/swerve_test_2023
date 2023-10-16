@@ -51,41 +51,41 @@ public final class Constants {
 
     public final static class Motors { // Motor IDs
       public static final Object[] kFrontLeftVars = { 
-        0.914036214351654, // Offset
+        0.0, // Offset
         false, // Inverted
-        2, // Absolute Encoder ID
-        6, // Drive Motor ID
-        7, // Turning Motor ID
+        11, // Absolute Encoder ID
+        22, // Drive Motor ID
+        21, // Turning Motor ID
         true, // Drive Motor Inverted
         true, // Turning Motor Inverted
         "Front Left" // Name
       };
-      public static final Object[] kBackLeftVars = {
+      public static final Object[] kFrontRightVars = {
         0.0, // Offset
         false, // Inverted
-        4, // Absolute Encoder ID
-        10, // Drive Motor ID
-        11, // Turning Motor ID
-        false, // Drive Motor Inverted
-        true, // Turning Motor Inverted
-        "Back Left" // Name
-      };
-      public static final Object[] kFrontRightVars = {
-        1.529450297355652, // Offset
-        false, // Inverted
-        3, //[] Absolute Encoder ID
-        8, // Drive Motor ID
-        9, // Turning Motor ID
+        12, //[] Absolute Encoder ID
+        24, // Drive Motor ID
+        23, // Turning Motor ID
         false, // Drive Motor Inverted
         true, // Turning Motor Inverted
         "Front Right" // Name
       };
-      public static final Object[] kBackRightVars = {
+      public static final Object[] kBackLeftVars = {
         0.0, // Offset
         false, // Inverted
-        5, // Absolute Encoder ID
-        12, // Drive Motor ID
-        13, // Turning Motor ID
+        13, // Absolute Encoder ID
+        26, // Drive Motor ID
+        25, // Turning Motor ID
+        false, // Drive Motor Inverted
+        true, // Turning Motor Inverted
+        "Back Left" // Name
+      };
+      public static final Object[] kBackRightVars = {
+        0.701248731464148, // Offset
+        false, // Inverted
+        14, // Absolute Encoder ID
+        28, // Drive Motor ID
+        27, // Turning Motor ID
         false, // Drive Motor Inverted
         true, // Turning Motor Inverted
         "Back Right" // Name
